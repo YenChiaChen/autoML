@@ -22,7 +22,10 @@ export const api = createApi({
         body: { dataset },
       }),
     }),
+    listDatasets: builder.query<string[], void>({
+        query: () => '/datasets',
+      }),
   }),
 })
 
-export const { useGetHelloQuery, usePredictQuery } = api
+export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery } = api
