@@ -1,9 +1,12 @@
-
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 interface HelloResponse {
   message: string;
 }
+
+interface PredictResponse {
+    [key: string]: number; 
+  }
 
 export const api = createApi({
   reducerPath: 'api',
@@ -12,7 +15,14 @@ export const api = createApi({
     getHello: builder.query<HelloResponse, void>({
       query: () => '/',
     }),
+    predict: builder.query<PredictResponse, string>({
+      query: (dataset) => ({
+        url: '/predict',
+        method: 'POST',
+        body: { dataset },
+      }),
+    }),
   }),
 })
 
-export const { useGetHelloQuery } = api
+export const { useGetHelloQuery, usePredictQuery } = api
