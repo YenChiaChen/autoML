@@ -25,7 +25,14 @@ export const api = createApi({
     listDatasets: builder.query<string[], void>({
         query: () => '/datasets',
       }),
+      models: builder.mutation<any, { options: string[]; fileName: string }>({
+        query: (data) => ({
+          url: '/models',
+          method: 'POST',
+          body: data,
+        }),
+    }),
   }),
 })
 
-export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery } = api
+export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery, useModelsMutation } = api
