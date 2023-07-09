@@ -166,6 +166,12 @@ def get_column_values(dataset, column):
     values = df[column].dropna().tolist()
     return jsonify(values)
 
+@app.route('/ml/models', methods=['GET'])
+def get_support_models():
+    SUPPORT_MODELS = ['SVM', 'KNN', 'RF', 'MLP']
+
+    return jsonify(SUPPORT_MODELS)
+
  
 def numpy_to_python_type(val):
     if isinstance(val, (np.int_, np.intc, np.intp, np.int8,
@@ -184,6 +190,8 @@ def numpy_to_python_type(val):
 
     else:
         return val
+    
+
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)

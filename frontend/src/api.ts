@@ -43,8 +43,11 @@ export const api = createApi({
     }),    
     fetchColumnValues: builder.query<Array<number>, { dataset: string; column: string }>({
       query: ({ dataset, column }) => `datasets/${dataset}/column/${column}/values`,
+    }), 
+    getSupportModels: builder.query<string[], void>({
+      query: () => '/ml/models',
     }),
   }),
 })
 
-export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery } = api
+export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery } = api

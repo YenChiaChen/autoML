@@ -2,6 +2,7 @@ import React, {useState} from "react"
 import Stepper from "./components/Stepper";
 import DataSelectPage from "./DataSelectPage";
 import DataShowPage from "./DataShowPage";
+import ModelSelectPage from "./ModelSelectPage";
 const HomePage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const steps = ["Select Dataset", "Dataset Preview", "Choose Your Model", "Result"];
@@ -14,7 +15,7 @@ const HomePage: React.FC = () => {
       case 1:
         return <DataShowPage dataset={dataset} />
       case 2:
-        return <p>Select Model Page</p>
+        return <ModelSelectPage />
       case 3:
         return <p>Result Page</p>
       default:
