@@ -1,5 +1,6 @@
 import React, {useState} from "react"
 import Step from "./Step";
+import SelectDataPage from "../SelectDataPage";
 
 const DashBoardPage: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
@@ -16,7 +17,9 @@ const DashBoardPage: React.FC = () => {
         </div>
 
         <div className='px-20 mt-10'>
-            <div className='w-75 bg-gray-100 p-10'>123456</div>
+            <div className='w-75 bg-gray-100 p-10'>
+                <SelectDataPage />
+            </div>
         </div>
 
     </>

@@ -2,9 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom/client';
 import './index.css';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
-import HomePage from './pages/HomePage';
-import HomePageTest from './pages/HomePageTest';
-import DashBoardPage from './pages/DashBoardPage';
+import HomePage from './pages';
 import { store } from './store';
 import { Provider } from 'react-redux'
 
@@ -13,7 +11,7 @@ import { Provider } from 'react-redux'
 const App: React.FC = () => (
   <Router>
   <Routes>
-    <Route path="/" element={<DashBoardPage/>}/>
+    <Route path="/" element={<HomePage/>}/>
   </Routes>
 </Router>
 );

@@ -32,7 +32,19 @@ export const api = createApi({
           body: data,
         }),
     }),
+    fetchColumns: builder.query<Array<string>, string>({
+      query: (dataset) => `datasets/${dataset}/columns`,
+    }),    
+    fetchColumnEda: builder.query<any, { dataset: string; column: string }>({
+      query: ({ dataset, column }) => `datasets/${dataset}/column/${column}/eda`,
+    }),    
+    fetchDatasetEda: builder.query<any, string>({
+      query: (dataset) => `datasets/${dataset}/eda`,
+    }),    
+    fetchColumnValues: builder.query<Array<number>, { dataset: string; column: string }>({
+      query: ({ dataset, column }) => `datasets/${dataset}/column/${column}/values`,
+    }),
   }),
 })
 
-export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery, useModelsMutation } = api
+export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery } = api

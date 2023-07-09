@@ -14,6 +14,7 @@ from sklearn.metrics import accuracy_score
 from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LinearRegression
 from flask_cors import CORS
+import numpy as np
 
 
 UPLOAD_FOLDER =  './upload'
@@ -22,18 +23,18 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 CORS(app)
 
 # Train the models when starting the server
-digits = load_digits()
-X_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target, test_size=0.5, shuffle=False)
+# digits = load_digits()
+# X_train, X_test, y_train, y_test = train_test_split(digits.data, digits.target, test_size=0.5, shuffle=False)
 
-models = {
-    'LogisticRegression': LogisticRegression(),
-    'DecisionTree': DecisionTreeClassifier(),
-    'RandomForest': RandomForestClassifier()
-}
+# models = {
+#     'LogisticRegression': LogisticRegression(),
+#     'DecisionTree': DecisionTreeClassifier(),
+#     'RandomForest': RandomForestClassifier()
+# }
 
-for name, model in models.items():
-    model.fit(X_train, y_train)
-    joblib.dump(model, f"{name}.joblib")
+# for name, model in models.items():
+#     model.fit(X_train, y_train)
+#     joblib.dump(model, f"{name}.joblib")
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -91,6 +92,12 @@ def train_models():
             accuracies[option] = accuracy
     return jsonify(accuracies)
 
+@app.route('/datasets/<string:dataset>/columns', methods=['GET'])
+def get_columns(dataset):
+    df = pd.read_csv('./upload/' + str(dataset))
+    columns = df.columns.tolist()
+    return jsonify(columns)
+
 def train_and_get_accuracy(model, df, label_column='label'):
     # Split the DataFrame into features (X) and labels (y)
     X = df.drop(label_column, axis=1)
@@ -108,6 +115,75 @@ def train_and_get_accuracy(model, df, label_column='label'):
     # Calculate the accuracy
     accuracy = accuracy_score(y_test, y_pred)
     return accuracy
+
+
+@app.route('/datasets/<string:dataset>/column/<string:column>/eda', methods=['GET'])
+def get_column_eda(dataset, column):
+    df = pd.read_csv('./upload/' + str(dataset))
+
+    if column not in df.columns:
+        return jsonify({'error': 'Column not found'}), 404
+    
+    series = df[column]
+
+    eda = {
+        'mean': numpy_to_python_type(np.mean(series)),
+        'median': numpy_to_python_type(np.median(series)),
+        'min': numpy_to_python_type(np.min(series)),
+        'max': numpy_to_python_type(np.max(series)),
+        'unique_count': numpy_to_python_type(series.nunique()),
+        'null_count': numpy_to_python_type(series.isnull().sum()),
+    }
+
+    return jsonify(eda)
+
+@app.route('/datasets/<string:dataset>/eda', methods=['GET'])
+def get_dataset_eda(dataset):
+
+    df = pd.read_csv('./upload/' + str(dataset))
+    missing_cells = df.isnull().sum().sum()
+    total_cells = df.size
+
+    eda = {
+        'number_of_variables': numpy_to_python_type(df.shape[1]),
+        'number_of_observations': numpy_to_python_type(df.shape[0]),
+        'missing_cells': numpy_to_python_type(missing_cells),
+        'missing_cells_percentage': numpy_to_python_type(missing_cells / total_cells * 100),
+        'duplicated_rows': numpy_to_python_type(df.duplicated().sum()),
+        'duplicated_rows_percentage': numpy_to_python_type(df.duplicated().sum() / df.shape[0] * 100),
+        'total_size_in_memory': numpy_to_python_type(df.memory_usage(deep=True).sum()/ (1024 * 1024) ),
+    }
+
+    return jsonify(eda)
+
+@app.route('/datasets/<string:dataset>/column/<string:column>/values', methods=['GET'])
+def get_column_values(dataset, column):    
+    df = pd.read_csv('./upload/' + str(dataset))
+
+    if column not in df.columns:
+        return jsonify({'error': 'Column not found'}), 404
+
+    values = df[column].dropna().tolist()
+    return jsonify(values)
+
+ 
+def numpy_to_python_type(val):
+    if isinstance(val, (np.int_, np.intc, np.intp, np.int8,
+        np.int16, np.int32, np.int64, np.uint8,
+        np.uint16, np.uint32, np.uint64)):
+
+        return int(val)
+
+    elif isinstance(val, (np.float_, np.float16, np.float32, 
+        np.float64)):
+        
+        return float(val)
+
+    elif isinstance(val, (np.complex_, np.complex64, np.complex128)):
+        return complex(val)
+
+    else:
+        return val
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000, debug=True)
