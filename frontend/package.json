@@ -52,6 +52,7 @@
   },
   "devDependencies": {
     "@types/react-plotly.js": "^2.6.0",
-    "daisyui": "^3.1.10"
+    "daisyui": "^3.1.10",
+    "eslint": "^8.44.0"
   }
 }

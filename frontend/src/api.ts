@@ -3,15 +3,28 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 interface HelloResponse {
   message: string;
 }
-
-interface PredictResponse {
-    [key: string]: number; 
-  }
+interface Dataset {
+  id: number;
+  dataset_name: string;
+  dataset: string;
+  data_type: string;
+  delimiter: string;
+  encoding: string;
+  schema: {
+    [key: string]: string;
+  };
+}
 
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
   endpoints: (builder) => ({
+
+    fetchDatasets: builder.query<Dataset[], void>({
+      query: () => '/api/datasets',
+    }),
+
+
     getHello: builder.query<HelloResponse, void>({
       query: () => '/',
     }),
@@ -50,4 +63,4 @@ export const api = createApi({
   }),
 })
 
-export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery } = api
