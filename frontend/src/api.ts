@@ -15,11 +15,11 @@ export const api = createApi({
     getHello: builder.query<HelloResponse, void>({
       query: () => '/',
     }),
-    predict: builder.query<PredictResponse, string>({
-      query: (dataset) => ({
-        url: '/predict',
+    predict: builder.mutation<any, {models: string[], dataset: string}>({
+      query: ({models, dataset}) => ({
+        url: '/ml/predict', // Replace with your correct endpoint
         method: 'POST',
-        body: { dataset },
+        body: {models, dataset}
       }),
     }),
     listDatasets: builder.query<string[], void>({
@@ -50,4 +50,4 @@ export const api = createApi({
   }),
 })
 
-export const { useGetHelloQuery, usePredictQuery, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery } = api

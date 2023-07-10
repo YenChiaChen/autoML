@@ -36,17 +36,28 @@ CORS(app)
 #     model.fit(X_train, y_train)
 #     joblib.dump(model, f"{name}.joblib")
 
-@app.route('/predict', methods=['POST'])
+@app.route('/ml/predict', methods=['POST'])
 def predict():
-    dataset = request.json.get('dataset')
+    data = request.get_json()
 
-    # You can use the dataset variable here to load different models based on the dataset
-    predictions = {}
-    for name, model in models.items():
-        model.fit(X_train, y_train)
-        predictions[name] = accuracy_score(y_test, model.predict(X_test))
+    # Ensure models and dataset are provided
+    # if not data or 'models' not in data or 'dataset' not in data:
+    #     return jsonify({"message": "Models and dataset are required"}), 400
 
-    return jsonify(predictions)
+    models = data['models']
+    dataset = data['dataset']
+
+    # Placeholder logic. Replace with your actual ML model logic.
+    # for model in models:
+    #     if model not in SUPPORT_MODELS:
+    #         return jsonify({"message": f"Unsupported model: {model}"}), 400
+
+    # Perform some operations on the models and dataset...
+    # Compute the precision, recall, f1, etc. for each model.
+    # This is just an example. Replace with your real computation.
+    results = {model: {"precision": 0.9, "recall": 0.8, "f1": 0.85} for model in models}
+
+    return jsonify(results)
 
 @app.route('/upload', methods=['POST'])
 def upload_file():

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { usePredictQuery } from "../../api";
 import DataSetList from "./DatasetList";
 
 const HomePage: React.FC = () => {
@@ -7,9 +6,6 @@ const HomePage: React.FC = () => {
   const [dataset, setDataset] = useState('');
   const [file, setFile] = useState<File | null>(null);
   const [isUploadComplete, setIsUploadComplete] = useState(false);
-  const { data: prediction, error, isLoading } = usePredictQuery(dataset, {
-    skip: !file,
-  });
 
   const handleDatasetSelect = (dataset: string) => {
     setDataset(dataset);
@@ -52,21 +48,6 @@ const HomePage: React.FC = () => {
         <option value="mnist">MNIST</option>
         {/* add other datasets here */}
       </select>
-      <button onClick={handlePredictClick} disabled={isLoading}>
-        Predict
-      </button>
-      {isLoading && <p>Loading prediction...</p>}
-      {prediction && (
-        <p>
-          Prediction:
-          <br />
-          Logistic Regression: {prediction['LogisticRegression']}
-          <br />
-          Decision Tree: {prediction['DecisionTree']}
-          <br />
-          Random Forest: {prediction['RandomForest']}
-        </p>
-      )}
     </div>
   );
 }
