@@ -79,6 +79,23 @@ def upload_file():
         return jsonify(success=True)
     except Exception as e:
         return jsonify(error=str(e)), 500
+    
+@app.route('/delete', methods=['DELETE'])
+def delete_file():
+    try:
+        filename = request.json['filename']
+        db = get_db()
+        c = db.cursor()
+        # delete from database
+        c.execute("DELETE FROM files WHERE filename=?", (filename,))
+        db.commit()
+
+        # remove the file from the server if needed
+        os.remove(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+
+        return jsonify(success=True)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 @app.route('/ml/predict', methods=['POST'])
 def predict():

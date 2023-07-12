@@ -70,7 +70,14 @@ export const api = createApi({
     getFiles: builder.query<FileData[], void>({
       query: () => 'datainfo',
     }),
+    deleteFile: builder.mutation({
+      query: (filename) => ({
+        url: 'delete',
+        method: 'DELETE',
+        body: { filename },
+      }),
+    }),
   }),
 })
 
-export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation } = api
