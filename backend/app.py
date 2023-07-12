@@ -15,7 +15,8 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.linear_model import LinearRegression
 from flask_cors import CORS
 import numpy as np
-
+import sqlite3
+from datetime import datetime
 
 UPLOAD_FOLDER =  './upload'
 app = Flask(__name__)
@@ -35,6 +36,49 @@ CORS(app)
 # for name, model in models.items():
 #     model.fit(X_train, y_train)
 #     joblib.dump(model, f"{name}.joblib")
+
+# connect to the database
+from flask import g
+
+def get_db():
+    db = getattr(g, '_database', None)
+    if db is None:
+        db = g._database = sqlite3.connect('file_info.db')
+    return db
+
+@app.teardown_appcontext
+def close_connection(exception):
+    db = getattr(g, '_database', None)
+    if db is not None:
+        db.close()
+
+
+@app.route('/upload', methods=['POST'])
+def upload_file():
+    try:
+        db = get_db()
+        c = db.cursor()
+        if 'file' not in request.files:
+            return jsonify(error='No file part'), 400
+        file = request.files['file']
+        if file.filename == '':
+            return jsonify(error='No selected file'), 400
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        
+        # gather file info
+        uploadtime = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        datasize = os.path.getsize(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        df = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        column_number = len(df.columns)
+
+        # save file info to database
+        c.execute("INSERT INTO files VALUES (?, ?, ?, ?)", (filename, uploadtime, datasize, column_number))
+        db.commit()
+        
+        return jsonify(success=True)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
 
 @app.route('/ml/predict', methods=['POST'])
 def predict():
@@ -59,19 +103,19 @@ def predict():
 
     return jsonify(results)
 
-@app.route('/upload', methods=['POST'])
-def upload_file():
-    try:
-        if 'file' not in request.files:
-            return jsonify(error='No file part'), 400
-        file = request.files['file']
-        if file.filename == '':
-            return jsonify(error='No selected file'), 400
-        filename = secure_filename(file.filename)
-        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-        return jsonify(success=True)
-    except Exception as e:
-        return jsonify(error=str(e)), 500
+# @app.route('/upload', methods=['POST'])
+# def upload_file():
+#     try:
+#         if 'file' not in request.files:
+#             return jsonify(error='No file part'), 400
+#         file = request.files['file']
+#         if file.filename == '':
+#             return jsonify(error='No selected file'), 400
+#         filename = secure_filename(file.filename)
+#         file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+#         return jsonify(success=True)
+#     except Exception as e:
+#         return jsonify(error=str(e)), 500
     
 @app.route('/datasets', methods=['GET'])
 def list_datasets():
@@ -102,6 +146,22 @@ def train_models():
             accuracy = train_and_get_accuracy(model, data)
             accuracies[option] = accuracy
     return jsonify(accuracies)
+
+@app.route('/datainfo', methods=['GET'])
+def get_datainfo():
+    try:
+        db = get_db()
+        c = db.cursor()
+        # query all rows in the 'files' table
+        c.execute("SELECT * FROM files")
+        data = c.fetchall()
+        
+        # convert to list of dicts for jsonify
+        data = [dict(zip(["filename", "uploadtime", "datasize", "column_number"], row)) for row in data]
+        return jsonify(data)
+    except Exception as e:
+        return jsonify(error=str(e)), 500
+
 
 @app.route('/datasets/<string:dataset>/columns', methods=['GET'])
 def get_columns(dataset):

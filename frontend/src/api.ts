@@ -15,6 +15,13 @@ interface Dataset {
   };
 }
 
+interface FileData {
+  filename: string;
+  uploadtime: string;
+  datasize: number;
+  column_number: number;
+}
+
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
@@ -60,7 +67,10 @@ export const api = createApi({
     getSupportModels: builder.query<string[], void>({
       query: () => '/ml/models',
     }),
+    getFiles: builder.query<FileData[], void>({
+      query: () => 'datainfo',
+    }),
   }),
 })
 
-export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery } = api
