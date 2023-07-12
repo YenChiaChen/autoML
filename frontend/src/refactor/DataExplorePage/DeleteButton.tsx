@@ -17,7 +17,7 @@ const DeleteButton: React.FC<DeleteButtonProps> = ({ selectedFiles }) => {
     if (isLoading) return <button disabled>Deleting...</button>
 
     return (
-        <button onClick={handleDelete}>Delete</button>
+        <button className='btn' onClick={handleDelete}>Delete</button>
     )
 }
 
