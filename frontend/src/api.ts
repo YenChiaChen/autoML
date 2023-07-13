@@ -77,7 +77,11 @@ export const api = createApi({
         body: { filename },
       }),
     }),
+    getDatasetPreview: builder.query<any, string>({
+      query: (filename) => `datasets/preview/${filename}`,
+    }),
   }),
+  
 })
 
-export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation, useGetDatasetPreviewQuery } = api

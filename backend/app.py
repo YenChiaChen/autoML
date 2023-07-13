@@ -139,6 +139,18 @@ def list_datasets():
     files = os.listdir(app.config['UPLOAD_FOLDER'])
     return jsonify(files)
 
+@app.route('/datasets/preview/<filename>', methods=['GET'])
+def get_dataset_preview(filename):
+    if filename in os.listdir(app.config['UPLOAD_FOLDER']):
+        file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+        df = pd.read_csv(file_path)
+        preview_data = df.head(10).fillna(value = 'NaN').to_dict(orient='records')  # Fill NaN values with None
+        return jsonify(preview_data)
+    else:
+        return jsonify({"error": "File not found"}), 404
+
+
+
 @app.route('/models', methods=['POST'])
 def train_models():
     selected_options = request.json.get('options', [])
