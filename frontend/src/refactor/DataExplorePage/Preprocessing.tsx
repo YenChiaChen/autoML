@@ -41,13 +41,13 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
         switch (step) {
             case 1:
                 if (dataset)
-                    return <ProprocessTypes filename={filename} />
+                    return <ProprocessTypes filename={filename} step={step} setStep={setStep}  />
                 else
                     return <p>Loading</p>
             case 2:
                 return <p>Loading</p>
             default:
-                return <ProprocessTypes filename={filename} />;
+                return <ProprocessTypes filename={filename} step={step} setStep={setStep} />;
         }
     };
 
@@ -62,7 +62,7 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
                 {renderStepComponent()}
                 <div className='w-full my-5 text-right'> 
                     {step>1 &&<button className='btn' onClick={handleLastStep}>Previous</button>}
-                    <button className='btn ml-5 btn-primary' onClick={handleNextStep}>Next Step</button>
+                    {step>1 &&<button className='btn ml-5 btn-primary' onClick={handleNextStep}>Next Step</button>}
                 </div>
             </div>
         </div>

@@ -5,6 +5,8 @@ import { useGetDatasetTypesQuery, useSetDatasetMutation} from '../../../api';
 
 interface DatasetComponentProps {
     filename: string;
+    step: number;
+    setStep: (newStep: number) => void; 
 }  
 interface DataType {
     type: string;
@@ -19,7 +21,7 @@ interface Dataset {
 const dataTypes = ['object', 'int64', 'float64', 'bool', 'datetime64', 'timedelta[ns]', 'category'];
 const categories = ['Categorical', 'Numerical'];
 
-const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename}) => {
+const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename,step ,setStep}) => {
     const { data: dataset, error, isLoading } = useGetDatasetTypesQuery(filename);
     const [setDataset, { isSuccess }] = useSetDatasetMutation();
     const [targetColumn, setTargetColumn] = useState<string | null>(null);
@@ -53,6 +55,7 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename}) => {
         } else {
             // Save the dataset changes
             await setDataset({ filename, data: editedDataset });
+            setStep(step + 1)
         }
     }
 
