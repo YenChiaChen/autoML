@@ -19,7 +19,7 @@ interface Dataset {
 const dataTypes = ['object', 'int64', 'float64', 'bool', 'datetime64', 'timedelta[ns]', 'category'];
 const categories = ['Categorical', 'Numerical'];
 
-const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename }) => {
+const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename}) => {
     const { data: dataset, error, isLoading } = useGetDatasetTypesQuery(filename);
     const [setDataset, { isSuccess }] = useSetDatasetMutation();
     const [targetColumn, setTargetColumn] = useState<string | null>(null);
@@ -100,6 +100,7 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename }) => {
                 </div>
             )}
             {showTable && (
+                <>
                 <table className="table-fixed w-full">
                     <thead>
                         <tr>
@@ -136,10 +137,10 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename }) => {
                                 </td>
                             </tr>
                         ))}
-
-<button onClick={handleNextStep} className="ml-2">Save</button>
                     </tbody>
                 </table>
+                <button onClick={handleNextStep} className="ml-2">Save</button>
+                </>
             )}
         </div>
     );
