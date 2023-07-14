@@ -22,6 +22,15 @@ interface FileData {
   column_number: number;
 }
 
+interface DataType {
+  type: string;
+  isCategorical: boolean;
+  examples: string[];
+}
+
+interface DatasetTypes {
+  [key: string]: DataType;
+}
 export const api = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/' }),
@@ -30,6 +39,19 @@ export const api = createApi({
     fetchDatasets: builder.query<Dataset[], void>({
       query: () => '/api/datasets',
     }),
+    getDatasetTypes: builder.query<DatasetTypes, string>({
+      query: (filename) => `dataset/types/${filename}`,
+  }),
+  setDataset: builder.mutation<Dataset, { filename: string, data: Dataset }>({
+    query: ({ filename, data }) => ({
+        url: `dataset/types/${filename}`,
+        method: 'POST',
+        body: data,
+    }),
+}),
+getTempDataset: builder.query<Dataset, string>({
+    query: (filename) => `temp-dataset/${filename}`,
+}),
 
 
     getHello: builder.query<HelloResponse, void>({
@@ -80,8 +102,15 @@ export const api = createApi({
     getDatasetPreview: builder.query<any, string>({
       query: (filename) => `datasets/preview/${filename}`,
     }),
+    getProfile: builder.query<any, string>({
+      query: (filename) => ({
+        url: '/profile',
+        method: 'POST',
+        body: { filename },
+      }),
+    }),
   }),
   
 })
 
-export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation, useGetDatasetPreviewQuery } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation, useGetDatasetPreviewQuery, useGetProfileQuery, useGetDatasetTypesQuery , useGetTempDatasetQuery,useSetDatasetMutation } = api

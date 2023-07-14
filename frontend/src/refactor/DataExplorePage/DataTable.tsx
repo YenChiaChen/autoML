@@ -3,6 +3,8 @@ import { useGetFilesQuery } from '../../api';
 import { UploadButton } from './UploadButton';
 import DeleteButton from './DeleteButton';
 import DatasetPreview from './DataPreview';
+import DatasetProfiler from './ProfilingView';
+import DatasetPreprocessing from './Preprocessing'
 
 interface FileData {
     filename: string;
@@ -65,7 +67,7 @@ const DataTable: React.FC = () => {
           <th>Column Numbers</th>
           <th>Data Size</th>
           <th>Upload Time</th>
-          <th>EDA Panel</th>
+          <th>Analysis Panel</th>
         </tr>
       </thead>
       <tbody>
@@ -83,6 +85,9 @@ const DataTable: React.FC = () => {
               <tr>
                 <td colSpan={6}>
                     <DatasetPreview filename={dataset.filename} />
+                    <DatasetProfiler filename={dataset.filename} />
+                    <DatasetPreprocessing filename={dataset.filename} />
+                    <div className='my-5'>&nbsp;</div>
                 </td>
               </tr>
             )}

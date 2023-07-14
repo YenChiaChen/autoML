@@ -12,7 +12,8 @@ const DatasetPreview: React.FC<DatasetPreviewProps> = ({ filename }) => {
   if (error) {console.log(error); return <p>Something's wrong...</p>};
 
   return (
-    <div tabIndex={0} className="collapse collapse-plus border border-base-300 shadow">
+    <div tabIndex={0} className="collapse collapse-plus border border-base-300 mt-5">
+        <input type="checkbox" className="peer" /> 
   <div className="collapse-title text-sm font-medium">
     Preview
   </div>

@@ -1,6 +1,6 @@
 
 
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, send_from_directory
 import joblib
 from werkzeug.utils import secure_filename
 import os
@@ -17,10 +17,13 @@ from flask_cors import CORS
 import numpy as np
 import sqlite3
 from datetime import datetime
+from pandas_profiling import ProfileReport
 
 UPLOAD_FOLDER =  './upload'
+TEMP_FOLDER = './temp'
 app = Flask(__name__)
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.config['TEMP_FOLDER'] = TEMP_FOLDER
 CORS(app)
 
 # Train the models when starting the server
@@ -52,6 +55,20 @@ def close_connection(exception):
     if db is not None:
         db.close()
 
+@app.route('/profile', methods=['POST'])
+def profile():
+    filename = request.json['filename']
+    df = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    profile = ProfileReport(df, explorative=True)
+    profile_filename = os.path.join('reports', f"{os.path.splitext(filename)[0]}_profile.html")
+    profile.to_file(profile_filename)
+    return jsonify({'profile_filename': profile_filename})
+
+@app.route('/profiles/reports/<path:filename>', methods=['GET'])
+def serve_profile(filename):
+    return send_from_directory(directory=os.path.join(os.getcwd(), 'reports'), path=filename)
+
+
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -79,6 +96,40 @@ def upload_file():
         return jsonify(success=True)
     except Exception as e:
         return jsonify(error=str(e)), 500
+    
+def is_categorical(array_like):
+    return array_like.dtype.name == 'object'
+
+@app.route('/dataset/types/<filename>', methods=['GET', 'POST'])
+def get_dataset(filename):
+    df = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+    data = {}
+
+    if request.method == 'GET':
+        for column in df.columns:
+            unique_values = df[column].dropna().unique()
+            examples = unique_values[:3].tolist()
+
+            data[column] = {
+                'type': str(df[column].dtype),
+                'isCategorical': is_categorical(df[column]),
+                'examples': examples
+            }
+
+        return jsonify(data)
+    elif request.method == 'POST':
+        data = request.json
+        # Update and save the dataset as a temp CSV file
+        df = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        for column, datatype in data.items():
+            if datatype['type'] != df[column].dtype.name:
+                if datatype['type'] == 'category':
+                    df[column] = df[column].astype('category')
+                else:
+                    df[column] = df[column].astype(datatype['type'])
+            df.to_csv(os.path.join(app.config['TEMP_FOLDER'], filename), index=False)
+        
+        return jsonify({"message": "Dataset updated successfully"}), 200
     
 @app.route('/delete', methods=['DELETE'])
 def delete_file():
