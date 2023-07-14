@@ -41,14 +41,11 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
         switch (step) {
             case 1:
                 if (dataset)
-                    return <TargetColumn dataset={dataset} onTargetColumnSelected={setTargetColumn} />
+                    return <ProprocessTypes filename={filename} />
                 else
                     return <p>Loading</p>
             case 2:
-                if (dataset)
-                    return <DataTable dataset={dataset} targetColumn={targetColumn} onDatasetChanged={setEditedDataset}  />
-                else
-                    return <p>Loading</p>
+                return <p>Loading</p>
             default:
                 return <ProprocessTypes filename={filename} />;
         }

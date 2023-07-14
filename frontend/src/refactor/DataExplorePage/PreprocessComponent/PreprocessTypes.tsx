@@ -84,6 +84,7 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename}) => {
 
     return (
         <div className="p-4">
+            <p className='text-sm text-[#333333] mb-3'>Choose Target Value and Modify Data Type</p>
             {!showTable && (
                 <div>
                     <select onChange={(e) => {
@@ -139,7 +140,9 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename}) => {
                         ))}
                     </tbody>
                 </table>
-                <button onClick={handleNextStep} className="ml-2">Save</button>
+                <div className='w-full my-5 text-right'> 
+                    <button onClick={handleNextStep} className="ml-2 btn">Save</button>
+                </div>
                 </>
             )}
         </div>
