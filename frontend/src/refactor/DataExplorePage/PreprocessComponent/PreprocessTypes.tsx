@@ -1,8 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import 'tailwindcss/tailwind.css'
-import { useGetDatasetTypesQuery } from '../../../api';
-import { useSetDatasetMutation } from '../../../api';
+import { useGetDatasetTypesQuery, useSetDatasetMutation} from '../../../api';
 
 interface DatasetComponentProps {
     filename: string;
@@ -87,9 +86,11 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename }) => {
         <div className="p-4">
             {!showTable && (
                 <div>
-                    <label>Select target column:</label>
-                    <select onChange={(e) => setTargetColumn(e.target.value)} className="ml-2">
-                        <option>Select column...</option>
+                    <select onChange={(e) => {
+    setTargetColumn(e.target.value);
+    setShowTable(true); // This line makes the table appear as soon as a target column is selected
+}} className="select select-bordered w-full">
+                        <option disabled defaultValue={'Select Columns'}>Select Columns...</option>
                         {Object.keys(dataset).map((columnName, index) => (
                             <option key={index} value={columnName}>
                                 {columnName}
@@ -135,11 +136,11 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename }) => {
                                 </td>
                             </tr>
                         ))}
+
+<button onClick={handleNextStep} className="ml-2">Save</button>
                     </tbody>
                 </table>
             )}
-
-<button onClick={handleNextStep} className="ml-2">Next Step</button>
         </div>
     );
 };
