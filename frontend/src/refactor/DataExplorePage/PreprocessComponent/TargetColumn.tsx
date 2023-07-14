@@ -20,8 +20,7 @@ const TargetColumn: React.FC<TargetColumnProps> = ({ dataset, onTargetColumnSele
             <label className='label my-1'>
                 <span className="label-text">Select Your Target Column</span>
             </label>
-            <select onChange={(e) => onTargetColumnSelected(e.target.value)} className="select select-bordered">
-                <option disabled selected>Select Columns...</option>
+            <select onChange={(e) => onTargetColumnSelected(e.target.value)} className="select select-bordered w-full">
                 {Object.keys(dataset).map((columnName, index) => (
                     <option key={index} value={columnName}>
                         {columnName}

@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import ProprocessTypes from './PreprocessComponent/PreprocessTypes'
 import TargetColumn from './PreprocessComponent/TargetColumn';
-import { useGetDatasetTypesQuery } from '../../api';
+import { useGetDatasetTypesQuery, useSetDatasetMutation } from '../../api';
+import DataTable from './PreprocessComponent/DataTable';
 
 interface DatasetPreviewProps {
     filename: string;
@@ -25,6 +26,8 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
     const [step, setStep] = useState(1);
     const [targetColumn, setTargetColumn] = useState('');
     const { data: dataset, error, isLoading } = useGetDatasetTypesQuery(filename);
+    const [setDataset, { isSuccess }] = useSetDatasetMutation();
+    const [editedDataset, setEditedDataset] = useState<any>(null);
     const handleNextStep = () => {
         setStep(step + 1);
         console.log(targetColumn)
@@ -42,7 +45,10 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
                 else
                     return <p>Loading</p>
             case 2:
-                return <StepTwoComponent filename={filename} />;
+                if (dataset)
+                    return <DataTable dataset={dataset} targetColumn={targetColumn} onDatasetChanged={setEditedDataset}  />
+                else
+                    return <p>Loading</p>
             default:
                 return <ProprocessTypes filename={filename} />;
         }
