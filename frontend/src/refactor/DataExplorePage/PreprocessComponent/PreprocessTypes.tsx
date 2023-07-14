@@ -144,7 +144,7 @@ const ProprocessTypes: React.FC<DatasetComponentProps> = ({ filename,step ,setSt
                     </tbody>
                 </table>
                 <div className='w-full my-5 text-right'> 
-                    <button onClick={handleNextStep} className="ml-2 btn">Save</button>
+                    <button onClick={handleNextStep} className="btn ml-5 btn-primary">Next Step</button>
                 </div>
                 </>
             )}
