@@ -47,7 +47,7 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
             case 2:
                 return <p>Loading</p>
             default:
-                return <ProprocessTypes filename={filename} step={step} setStep={setStep} />;
+                return <p>Loading</p>;
         }
     };
 
