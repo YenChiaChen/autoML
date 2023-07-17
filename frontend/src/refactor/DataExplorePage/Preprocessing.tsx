@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import ProprocessTypes from './PreprocessComponent/PreprocessTypes'
+import TypesComp from './PreprocessComponent/TypesComp';
 import TargetColumn from './PreprocessComponent/TargetColumn';
 import { useGetDatasetTypesQuery, useSetDatasetMutation } from '../../api';
 import DataTable from './PreprocessComponent/DataTable';
@@ -41,7 +41,7 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
         switch (step) {
             case 1:
                 if (dataset)
-                    return <ProprocessTypes filename={filename} step={step} setStep={setStep}  />
+                    return <TypesComp filename={filename} step={step} setStep={setStep}  />
                 else
                     return <p>Loading</p>
             case 2:
