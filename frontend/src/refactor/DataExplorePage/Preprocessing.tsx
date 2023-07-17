@@ -1,36 +1,14 @@
 import React, { useState } from 'react';
 import TypesComp from './PreprocessComponent/TypesComp';
-import TargetColumn from './PreprocessComponent/TargetColumn';
-import { useGetDatasetTypesQuery, useSetDatasetMutation } from '../../api';
-import DataTable from './PreprocessComponent/DataTable';
 
 interface DatasetPreviewProps {
     filename: string;
 }
-interface DataType {
-    type: string;
-    isCategorical: boolean;
-    examples: string[];
-}
-
-interface Dataset {
-    [key: string]: DataType;
-}
-
-// This is a dummy component. You can replace it with the real component for step 2.
-const StepTwoComponent: React.FC<DatasetPreviewProps> = ({ filename }) => {
-    return <div>Step Two Component for {filename}</div>;
-};
 
 const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
     const [step, setStep] = useState(1);
-    const [targetColumn, setTargetColumn] = useState('');
-    const { data: dataset, error, isLoading } = useGetDatasetTypesQuery(filename);
-    const [setDataset, { isSuccess }] = useSetDatasetMutation();
-    const [editedDataset, setEditedDataset] = useState<any>(null);
     const handleNextStep = () => {
         setStep(step + 1);
-        console.log(targetColumn)
     };
 
     const handleLastStep = () => {
@@ -40,10 +18,7 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
     const renderStepComponent = () => {
         switch (step) {
             case 1:
-                if (dataset)
-                    return <TypesComp filename={filename} step={step} setStep={setStep}  />
-                else
-                    return <p>Loading</p>
+                return <TypesComp filename={filename} step={step} setStep={setStep}  />
             case 2:
                 return <p>Loading</p>
             default:
