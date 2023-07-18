@@ -1,6 +1,7 @@
 // DatasetProfiler.tsx
 import React, { useState, useEffect, useRef } from 'react';
 import { useGetProfileQuery } from '../../api';
+import Loading from '../components/Loading';
 
 
 interface DatasetPreviewProps {
@@ -25,7 +26,7 @@ const DatasetProfiler: React.FC<DatasetPreviewProps> = ({ filename }) => {
         Dataset Profiler - Pandas
         </div>
         <div className="collapse-content"> 
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <Loading />}
         {profileUrl && (
           <embed type="text/html" src={profileUrl} width="100%" height="400"></embed>
         )}

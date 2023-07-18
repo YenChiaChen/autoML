@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import TypesComp from './PreprocessComponent/TypesComp';
+import {DataFrameInfoTable} from './PreprocessComponent/DataFrameInfoTable';
 
 interface DatasetPreviewProps {
     filename: string;
@@ -18,7 +18,7 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
     const renderStepComponent = () => {
         switch (step) {
             case 1:
-                return <TypesComp filename={filename} step={step} setStep={setStep}  />
+                return <DataFrameInfoTable filename={filename}  />
             case 2:
                 return <p>Loading</p>
             default:
@@ -33,7 +33,7 @@ const DatasetPreprocessing: React.FC<DatasetPreviewProps> = ({ filename }) => {
                 Auto Preprocessing 
             </div>
             <div className="collapse-content"> 
-                <p>Step {step}</p>
+                <p>Columns Setting</p>
                 {renderStepComponent()}
                 <div className='w-full my-5 text-right'> 
                     {step>1 &&<button className='btn' onClick={handleLastStep}>Previous</button>}

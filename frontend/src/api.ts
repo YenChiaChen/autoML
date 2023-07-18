@@ -15,6 +15,21 @@ interface Dataset {
   };
 }
 
+interface ColumnInfo {
+  name: string;
+  category: string;
+  missing_values: {
+    count: number;
+    percentage: number;
+  };
+  handling_strategy: string;
+  examples: string[];
+}
+
+interface ColumnsData {
+  columns: ColumnInfo[];
+}
+
 interface FileData {
   filename: string;
   uploadtime: string;
@@ -102,6 +117,13 @@ getTempDataset: builder.query<Dataset, string>({
     getDatasetPreview: builder.query<any, string>({
       query: (filename) => `datasets/preview/${filename}`,
     }),
+    getColumns: builder.query<ColumnsData, string>({
+      query: (filename) => ({
+        url: 'api/dataframe_info',
+        method: 'POST',
+        body: { filename },
+      }),
+    }),
     getProfile: builder.query<any, string>({
       query: (filename) => ({
         url: '/profile',
@@ -113,4 +135,4 @@ getTempDataset: builder.query<Dataset, string>({
   
 })
 
-export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation, useGetDatasetPreviewQuery, useGetProfileQuery, useGetDatasetTypesQuery , useGetTempDatasetQuery,useSetDatasetMutation } = api
+export const { useGetHelloQuery, usePredictMutation, useListDatasetsQuery, useModelsMutation, useFetchColumnsQuery, useFetchColumnEdaQuery, useFetchDatasetEdaQuery, useFetchColumnValuesQuery, useGetSupportModelsQuery, useFetchDatasetsQuery, useGetFilesQuery, useDeleteFileMutation, useGetDatasetPreviewQuery, useGetProfileQuery, useGetDatasetTypesQuery , useGetTempDatasetQuery,useSetDatasetMutation, useGetColumnsQuery } = api

@@ -4,7 +4,7 @@ const NavBar: React.FC = () => {
 
   return (
     <div className="mx-48 mt-10">
-    <div className="navbar bg-base-100 mb-10 shadow-xl rounded-box">
+    <div className="navbar bg-base-100 mb-20 shadow-xl rounded-box">
   <div className="navbar-start">
     <div className="dropdown">
       <label tabIndex={0} className="btn btn-ghost btn-circle">
@@ -12,6 +12,7 @@ const NavBar: React.FC = () => {
       </label>
       <ul tabIndex={0} className="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
         <li><Link to='/'>Data Exploration</Link></li>
+        <li><Link to='/preprocess'>Auto Preprocessing</Link></li>
         <li><Link to='/autoML'>Build ML</Link></li>
         <li><Link to='/lifecycle'>Model Life Cycle</Link></li>
       </ul>

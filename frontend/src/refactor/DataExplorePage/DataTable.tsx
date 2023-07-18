@@ -86,7 +86,7 @@ const DataTable: React.FC = () => {
                 <td colSpan={6}>
                     <DatasetPreview filename={dataset.filename} />
                     <DatasetProfiler filename={dataset.filename} />
-                    <DatasetPreprocessing filename={dataset.filename} />
+                    {/* <DatasetPreprocessing filename={dataset.filename} /> */}
                     <div className='my-5'>&nbsp;</div>
                 </td>
               </tr>

@@ -8,6 +8,7 @@ import NavBar from "./refactor/components/NavBar";
 import DataExplorePage from "./refactor/DataExplorePage";
 import LifeCyclePage from "./refactor/LifeCyclePage";
 import AutoMLPage from "./refactor/AutoMLPage";
+import PreprocessingPage from "./refactor/PreprocessingPage";
 
 const App: React.FC = () => (
   <Router>
@@ -16,6 +17,7 @@ const App: React.FC = () => (
       <Route path="/" element={<DataExplorePage />} />
       <Route path="/lifecycle" element={<LifeCyclePage />} />
       <Route path="/autoML" element={<AutoMLPage />} />
+      <Route path="/preprocess" element={<PreprocessingPage />} />
     </Routes>
   </Router>
 );

@@ -68,6 +68,48 @@ def profile():
 def serve_profile(filename):
     return send_from_directory(directory=os.path.join(os.getcwd(), 'reports'), path=filename)
 
+def process_df(df):
+    columns_info = []
+
+    for col in df.columns:
+        missing_count = df[col].isnull().sum()
+        total_count = len(df[col])
+
+        # Replace these with your actual logic
+        category = "categorical"
+        handling_strategy = "drop"
+        examples = df[col].dropna().head(3).tolist()
+
+        columns_info.append({
+            "name": col,
+            "category": category,
+            "missing_values": {
+                "count": int(missing_count),
+                "percentage": float("{:.2f}".format(float((missing_count / total_count) * 100))),
+            },
+            "handling_strategy": handling_strategy,
+            "examples": examples,
+        })
+
+    return columns_info
+
+@app.route('/api/dataframe_info', methods=['POST'])
+def dataframe_info():
+    filename = request.json.get('filename')
+
+    if filename is None:
+        return jsonify({"error": "No filename provided"}), 400
+
+    try:
+        df = pd.read_csv(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        columns_info = process_df(df)
+
+        return jsonify({"columns": columns_info})
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
+
+
 
 
 @app.route('/upload', methods=['POST'])

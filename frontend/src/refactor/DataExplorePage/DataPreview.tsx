@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useGetDatasetPreviewQuery } from '../../api';
+import Loading from '../components/Loading';
 
 interface DatasetPreviewProps {
   filename: string;
@@ -8,7 +9,7 @@ interface DatasetPreviewProps {
 const DatasetPreview: React.FC<DatasetPreviewProps> = ({ filename }) => {
   const { data: previewData, error, isLoading } = useGetDatasetPreviewQuery(filename);
 
-  if (isLoading) return <p>Loading preview...</p>;
+  if (isLoading) return <Loading />;
   if (error) {console.log(error); return <p>Something's wrong...</p>};
 
   return (
