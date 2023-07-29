@@ -20,9 +20,9 @@ const DatasetSelectCard: React.FC<DatasetSelectProps> = ({selectedDataset, setSe
 
     return (
         <>
-<div className="form-control w-full max-w-xs">
+<div className="form-control w-full max-w-xs mt-10">
   <select className="select select-bordered">
-    <option disabled selected>Pick one</option>
+    <option disabled selected>Select Dataset</option>
     <option>Star Wars</option>
     <option>Harry Potter</option>
     <option>Lord of the Rings</option>

@@ -43,19 +43,26 @@ const PreprocessingPage: React.FC = () => {
         {activeStep === Steps.UPLOAD && 
         <>
           <DatasetSelectCard selectedDataset={selectedDataset} setSelectedDataset={setSelectedDataset} />
-          <button className='btn' onClick={() => handleNextStep(Steps.UPLOAD)}>Next</button>
+          <button className='btn mt-10' onClick={() => handleNextStep(Steps.UPLOAD)}>Next</button>
           </>
         }
       </Card>
 
       <Card step={Steps.CLEAN}>
-        <h2>Step 2: Clean</h2>
+        <h2>Step 2: Data Cleaning</h2>
         {activeStep === Steps.CLEAN && <button className='btn' onClick={() => handleNextStep(Steps.CLEAN)}>Next</button>}
       </Card>
-
+      <Card step={Steps.CLEAN}>
+        <h2>Step 3: Data Transformation</h2>
+        {activeStep === Steps.CLEAN && <button className='btn' onClick={() => handleNextStep(Steps.CLEAN)}>Next</button>}
+      </Card>
+      <Card step={Steps.CLEAN}>
+        <h2>Step 4: Data Reduction</h2>
+        {activeStep === Steps.CLEAN && <button className='btn' onClick={() => handleNextStep(Steps.CLEAN)}>Next</button>}
+      </Card>
       <Card step={Steps.SAVE}>
-        <h2>Step 3: Save</h2>
-        {activeStep === Steps.SAVE && <button className='btn' onClick={() => handleNextStep(Steps.SAVE)}>Done</button>}
+        <h2>Step 6: Data Save</h2>
+        {activeStep === Steps.CLEAN && <button className='btn' onClick={() => handleNextStep(Steps.CLEAN)}>Next</button>}
       </Card>
     </div>
     </div>
