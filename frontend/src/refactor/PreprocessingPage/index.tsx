@@ -29,7 +29,6 @@ const PreprocessingPage: React.FC = () => {
   const Card: React.FC<{ step: Steps; children: React.ReactNode }> = ({ step, children }) => (
     <div
       className={`m-2 p-4 ${activeStep === step ? 'bg-white' : 'bg-gray-200'} w-full card shadow`}
-      onClick={() => activeStep === step && handleNextStep(step)}
     >
       {children}
     </div>
@@ -43,7 +42,7 @@ const PreprocessingPage: React.FC = () => {
         {activeStep === Steps.UPLOAD && 
         <>
           <DatasetSelectCard selectedDataset={selectedDataset} setSelectedDataset={setSelectedDataset} />
-          <button className='btn mt-10' onClick={() => handleNextStep(Steps.UPLOAD)}>Next</button>
+          <button className='btn mt-10'>Next</button>
           </>
         }
       </Card>
