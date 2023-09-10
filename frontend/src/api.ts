@@ -12,7 +12,19 @@ export const api = createApi({
     getHello: builder.query<HelloResponse, void>({
       query: () => '/',
     }),
+
+    uploadFile: builder.mutation<string, File>({
+      query: (file) => {
+        const data = new FormData();
+        data.append('file', file);
+        return {
+          url: 'upload',
+          method: 'POST',
+          body: data,
+        };
+      },
+    }),
   }),
 })
 
-export const { useGetHelloQuery } = api
+export const { useUploadFileMutation } = api
